@@ -9,7 +9,7 @@
 
 - [x] ZeRO: Memory Optimizations Toward Training Trillion Parameter Models 
 
-
+- [x] Speculative Sampling:  Accelerating Large Language Model Decoding with Speculative Sampling
 
 
 
