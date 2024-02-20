@@ -1,4 +1,4 @@
-##### Accelerating Large Language Model Decoding with Speculative Sampling 
+##### FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning 
 
 ### 导读
 
