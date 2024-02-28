@@ -6,7 +6,7 @@
 
 vLLM团队分析了推理时的内存浪费问题，认为推理中存在三种内存浪费
 
-Reservation：由于不确定每个请求的输出长度，我们需要给每个请求预留max_seq_len的空间。
+Reservation：由于不确定每个请求的输出长度，需要给每个请求预留max_seq_len的空间。
 Internal Fragmentation：在Static Batching策略下，一个请求结束时，其剩余的空间就被浪费掉了。
 External Fragmentation：由于KVCache是一个巨大的矩阵，且必须占用连续内存，操作系统如果只分配大的连续内存，势必有很多小的内存空间被浪费掉。
 
@@ -17,12 +17,6 @@ External Fragmentation：由于KVCache是一个巨大的矩阵，且必须占用
 ![memory waste](PagedAttention.assets/memory waste.jpg)
 
 vLLM团队认为，Continuous Batching可以部分解决Internal Fragmentation问题，但是Reservation和External Fragmentation的浪费仍然存在。因此他们提出了Paged Attention，其借鉴了操作系统中通过Page管理虚拟内存的思想：将KVCache分割为固定大小的Block，这些block不需要存储在连续内存中，由一个统一的内存分配器管理。请求按需申请内存，不需要预先留好max_seq_len大小的内存，解决了Reservation的浪费，请求结束后释放掉自己的blocks，解决了Internal Fragmentation，而系统只需要分配小的block，解决了External Fragmentation的问题。
-
-vLLM团队的benchmark显示，使用PagedAttention可以将模型批量推理的吞吐量再提升3倍以上，达到Static Batching的6倍，而Paged Attention的另一个好处是不同的请求可以共享cache block，比如在beam search场景中，我们需要对同一个prompt生成多个结果，这些子请求就可以共享同一批prompt cache，PageAttention可以将beam search的吞吐量提升10倍以上。
-
-用户可以通过官方的vLLM库使用Paged Attention，英伟达的TensorRT-LLM库和微软的Deepspeed-MII库也对部分模型提供了支持。
-
-
 
 **2 现有系统无法利用内存共享的机会**
 
@@ -38,11 +32,13 @@ PagedAttention 会将请求的 KV 缓存分成一块块的，每一块（block�
 
 最后，它还能实现以块为粒度的内存共享；这种内存共享支持与同一请求相关的不同序列，甚至也支持不同的请求。
 
+vLLM团队的benchmark显示，使用PagedAttention可以将模型批量推理的吞吐量再提升3倍以上，达到Static Batching的6倍，而Paged Attention的另一个好处是不同的请求可以共享cache block，比如在beam search场景中，我们需要对同一个prompt生成多个结果，这些子请求就可以共享同一批prompt cache，PageAttention可以将beam search的吞吐量提升10倍以上。
+
 并行解码时的应用
 
 由于两个输出共享同一个 prompt，所以在 prompt 阶段只需为 prompt 的状态在内存空间中保留一个副本；这两个序列的 prompt 的逻辑块都会映射到同一个物理块。也就是Copy-on-write机制，只有出现不同的输出时才会拷贝一份。
 
-
+用户可以通过官方的vLLM库使用Paged Attention，英伟达的TensorRT-LLM库和微软的Deepspeed-MII库也对部分模型提供了支持。
 
 
 
