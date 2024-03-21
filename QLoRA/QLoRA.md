@@ -52,6 +52,8 @@ QLoRA创新点：
 
 32/(64*256)：32表示第二次量化时每块数据的量化系数，但是第二次量化的这个系数对应了原始参数的数量变成了64\*256个。因为第一次是64个数据只生成一个量化系数，而第二次量化是每256个数一起量化，才生成一个量化系数，这256个数的每一个都对应了第一次量化的64个参数，所以第二次量化的系数对应了64\*256个原始参数。
 
+**注意不是每个权重值量化所需要的空间，而是所需要的额外空间。**
+
 3）Paged Optimizers，内存统一管理，避免activation checkpoint时的内存峰值爆显存；
 
 其实就是快爆时卸载到CPU一部分暂时不用的优化器参数；
@@ -59,6 +61,10 @@ QLoRA创新点：
 这种技术利用了NVIDIA统一内存的特性，实现了CPU和GPU之间自动的页面转换。当GPU内存不足时，Paged Optimizers技术会自动将优化器状态转移到CPU内存，以确保优化器的正常运行。
 Paged Optimizers：分页优化器，是一种能够在CPU和GPU之间自动转换优化器状态的技术。
 NVIDIA统一内存：一种将CPU和GPU内存统一管理的技术，可以让CPU和GPU共享同一块内存，从而减少数据传输的时间和开销。
+
+4）**增加Adapter**：4-bit的NormalFloat与Double Quantization，节省了很多空间，但带来了性能损失，作者通过插入更多adapter来弥补这种性能损失。在LoRA中，一般会选择在query和value的全连接层处插入adapter。而QLoRA则在所有全连接层处都插入了adapter，增加了训练参数，弥补精度带来的性能损失。
+
+
 
 
 
@@ -81,6 +87,16 @@ QLoRA精度几乎无损，达到LoRA甚至full fp16的精度；
 https://blog.csdn.net/HERODING23/article/details/131584089
 
 https://blog.csdn.net/qq_16949707/article/details/131024256
+
+NF4量化详解
+
+https://zhuanlan.zhihu.com/p/666234324
+
+https://zhuanlan.zhihu.com/p/654967425
+
+思维盗图
+
+https://zhuanlan.zhihu.com/p/635345199
 
 
 
