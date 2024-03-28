@@ -106,7 +106,7 @@ https://zhuanlan.zhihu.com/p/666234324
 
 https://zhuanlan.zhihu.com/p/654967425
 
-思维盗图
+思维导图
 
 https://zhuanlan.zhihu.com/p/635345199
 
