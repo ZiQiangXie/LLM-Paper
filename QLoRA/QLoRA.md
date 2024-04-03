@@ -114,6 +114,12 @@ https://zhuanlan.zhihu.com/p/654967425
 
 https://zhuanlan.zhihu.com/p/635345199
 
+分位数量化的详解
+
+http://fancyerii.github.io/2023/12/14/qlora/
+
+
+
 
 
 
