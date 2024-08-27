@@ -63,7 +63,9 @@ https://mp.weixin.qq.com/s?__biz=MzA4MjY4NTk0NQ==&amp;mid=2247519461&amp;idx=1&a
 
 [5] https://www.nvidia.cn/geforce/news/rtx-40-series-vram-video-memory-explained/
 
+彻底理解Flash Attention研究动机的救命稻草
 
+[6] https://www.wolai.com/voY74vy53rt6bwrMBzEDDU
 
 
 

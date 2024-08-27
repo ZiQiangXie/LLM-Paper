@@ -76,3 +76,11 @@ LoRA 的实现原理，其实现流程为：
 https://developer.aliyun.com/article/1257855
 
 https://cloud.tencent.com/developer/article/2372297
+
+https://blog.csdn.net/qjzcy/article/details/131206691
+
+https://developer.aliyun.com/article/1257855
+
+https://blog.csdn.net/weixin_44826203/article/details/129733930
+
+https://cloud.tencent.com/developer/article/2375230
